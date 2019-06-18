@@ -46,6 +46,17 @@ module Lita
           call_api("im.list")
         end
 
+        def send_blocks(room_or_user, blocks)
+          call_api(
+            "chat.postMessage",
+            as_user: true,
+            unfurl_links: @config.unfurl_links,
+            unfurl_media: @config.unfurl_media,
+            channel: room_or_user.id,
+            blocks: MultiJson.dump(blocks.map(&:to_hash))
+          )
+        end
+
         def send_attachments(room_or_user, attachments)
           call_api(
             "chat.postMessage",

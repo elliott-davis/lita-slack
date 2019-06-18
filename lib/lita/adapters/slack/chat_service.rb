@@ -23,6 +23,10 @@ module Lita
           api.send_attachments(target, Array(attachments))
         end
         alias_method :send_attachment, :send_attachments
+
+        def send_blocks(target, blocks)
+          api.send_blocks(target.room_object, blocks)
+        end
       end
     end
   end
