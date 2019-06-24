@@ -3,9 +3,10 @@ module Lita
     class Slack < Adapter
       # @api private
       class MessageHandler
-        def initialize(robot, robot_id, data)
+        def initialize(robot, robot_id, config, data)
           @robot = robot
           @robot_id = robot_id
+          @config = config
           @data = data
           @type = data["type"]
         end
@@ -152,6 +153,7 @@ module Lita
         def handle_message
           return unless supported_subtype?
           return if data["user"] == 'USLACKBOT'
+          return if @config.ignore_users&.include?(data["user"])
 
           user = User.find_by_id(data["user"]) || User.create(data["user"])
 
