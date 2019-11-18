@@ -19,13 +19,13 @@ module Lita
         # @param attachments [Attachment, Array<Attachment>] An {Attachment} or array of
         #   {Attachment}s to send.
         # @return [void]
-        def send_attachments(target, attachments)
-          api.send_attachments(target, Array(attachments))
+        def send_attachments(attachments, opts = {})
+          api.send_attachments(Array(attachments), opts)
         end
         alias_method :send_attachment, :send_attachments
 
-        def send_blocks(target, blocks)
-          api.send_blocks(target.room_object, blocks)
+        def send_blocks(target, blocks, opts = {})
+          api.send_blocks(target.room_object, blocks, opts)
         end
       end
     end

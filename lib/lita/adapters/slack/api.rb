@@ -4,6 +4,7 @@ require 'lita/adapters/slack/team_data'
 require 'lita/adapters/slack/slack_im'
 require 'lita/adapters/slack/slack_user'
 require 'lita/adapters/slack/slack_channel'
+require 'lita/adapters/slack/slack_source'
 
 module Lita
   module Adapters
@@ -46,7 +47,7 @@ module Lita
           call_api("im.list")
         end
 
-        def send_blocks(room_or_user, blocks)
+        def send_blocks(room_or_user, blocks, opts = {})
           call_api(
             "chat.postMessage",
             as_user: true,
@@ -57,21 +58,25 @@ module Lita
           )
         end
 
-        def send_attachments(room_or_user, attachments)
+        def send_attachments(attachments, opts = {})
           call_api(
-            "chat.postMessage",
+            opts.fetch(:type, "chat.postMessage"),
             as_user: true,
-            channel: room_or_user.id,
+            channel: opts[:room_id],
+            link_names: true,
+            ts: opts.fetch(:ts, nil),
+            thread_ts: opts.fetch(:thread_ts, nil),
             attachments: MultiJson.dump(attachments.map(&:to_hash)),
           )
         end
 
-        def send_messages(channel_id, messages)
+        def send_messages(channel_id, messages, target)
           call_api(
             "chat.postMessage",
             **post_message_config,
             as_user: true,
             channel: channel_id,
+            thread_ts: target.thread_ts,
             text: messages.join("\n"),
           )
         end
