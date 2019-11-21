@@ -87,6 +87,7 @@ module Lita
 
         def rtm_start
           response_data = call_api("rtm.start")
+          config.host = "https://#{response_data["team"]["domain"]}.slack.com"
 
           TeamData.new(
             SlackIM.from_data_array(response_data["ims"]),
