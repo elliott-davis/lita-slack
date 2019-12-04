@@ -70,13 +70,13 @@ module Lita
           )
         end
 
-        def send_messages(channel_id, messages, target)
+        def send_messages(channel_id, messages, target = nil)
           call_api(
             "chat.postMessage",
             **post_message_config,
             as_user: true,
             channel: channel_id,
-            thread_ts: target.thread_ts,
+            thread_ts: target&.thread_ts || nil,
             text: messages.join("\n"),
           )
         end
